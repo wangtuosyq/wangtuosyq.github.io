@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Chapter 3:Linear Regression Models and Least Squares 目标1：采用tensorflow 实现线性回归模型目标2：在1的基础上，为模型添加子集选择与系数收缩功能。  随便写写的思考什么是机器学习算法？按维基上的定义，机器学习算法是一类从数据中自动分析获得规律，并利用规律对未知数据进行预测的算法。个人经验，这里面有几个关键点，对应着算法训练时的几个重">
+<meta name="description" content="Chapter 3:Linear Methods for Regression 目标1：采用tensorflow 实现线性回归模型目标2：在1的基础上，为模型添加子集选择与系数收缩功能。  随便写写的思考什么是机器学习算法？按维基上的定义，机器学习算法是一类从数据中自动分析获得规律，并利用规律对未知数据进行预测的算法。个人经验，这里面有几个关键点，对应着算法训练时的几个重要环节。1是什么样的数据可">
 <meta name="keywords" content="tensorflow,esl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="统计学习基础的tensorflow实践-1">
 <meta property="og:url" content="http://yoursite.com/2018/07/12/esl-tf-1/index.html">
 <meta property="og:site_name" content="机器学习实践">
-<meta property="og:description" content="Chapter 3:Linear Regression Models and Least Squares 目标1：采用tensorflow 实现线性回归模型目标2：在1的基础上，为模型添加子集选择与系数收缩功能。  随便写写的思考什么是机器学习算法？按维基上的定义，机器学习算法是一类从数据中自动分析获得规律，并利用规律对未知数据进行预测的算法。个人经验，这里面有几个关键点，对应着算法训练时的几个重">
+<meta property="og:description" content="Chapter 3:Linear Methods for Regression 目标1：采用tensorflow 实现线性回归模型目标2：在1的基础上，为模型添加子集选择与系数收缩功能。  随便写写的思考什么是机器学习算法？按维基上的定义，机器学习算法是一类从数据中自动分析获得规律，并利用规律对未知数据进行预测的算法。个人经验，这里面有几个关键点，对应着算法训练时的几个重要环节。1是什么样的数据可">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-12T14:15:54.178Z">
+<meta property="og:updated_time" content="2018-08-12T07:56:03.744Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="统计学习基础的tensorflow实践-1">
-<meta name="twitter:description" content="Chapter 3:Linear Regression Models and Least Squares 目标1：采用tensorflow 实现线性回归模型目标2：在1的基础上，为模型添加子集选择与系数收缩功能。  随便写写的思考什么是机器学习算法？按维基上的定义，机器学习算法是一类从数据中自动分析获得规律，并利用规律对未知数据进行预测的算法。个人经验，这里面有几个关键点，对应着算法训练时的几个重">
+<meta name="twitter:description" content="Chapter 3:Linear Methods for Regression 目标1：采用tensorflow 实现线性回归模型目标2：在1的基础上，为模型添加子集选择与系数收缩功能。  随便写写的思考什么是机器学习算法？按维基上的定义，机器学习算法是一类从数据中自动分析获得规律，并利用规律对未知数据进行预测的算法。个人经验，这里面有几个关键点，对应着算法训练时的几个重要环节。1是什么样的数据可">
 
 
 
@@ -342,7 +342,7 @@
       
 
       
-        <h2 id="Chapter-3-Linear-Regression-Models-and-Least-Squares"><a href="#Chapter-3-Linear-Regression-Models-and-Least-Squares" class="headerlink" title="Chapter 3:Linear Regression Models and Least Squares"></a>Chapter 3:Linear Regression Models and Least Squares</h2><hr>
+        <h2 id="Chapter-3-Linear-Methods-for-Regression"><a href="#Chapter-3-Linear-Methods-for-Regression" class="headerlink" title="Chapter 3:Linear Methods for Regression"></a>Chapter 3:Linear Methods for Regression</h2><hr>
 <p>目标1：采用tensorflow 实现线性回归模型<br>目标2：在1的基础上，为模型添加子集选择与系数收缩功能。</p>
 <hr>
 <h3 id="随便写写的思考"><a href="#随便写写的思考" class="headerlink" title="随便写写的思考"></a>随便写写的思考</h3><p>什么是机器学习算法？按维基上的定义，机器学习算法是一类从数据中自动分析获得规律，并利用规律对未知数据进行预测的算法。个人经验，这里面有几个关键点，对应着算法训练时的几个重要环节。1是什么样的数据可以从中学到规律，不是所有的数据都能从中学到规律，如白噪声，或者脏数据，也不是数据的所有维度都能学到想要的规律，最后数据的不同表现形式下，学习到规律的难度也不一样，所有算法训练最基础的工作就是特征工程；2.如何学到规律，虽然说条条大路通罗马，但并不是说漫无目的地乱走就一定能走到罗马去，起码在有成本限制的情况下不行，所以需要先大致指定一个方向去学习，也就是确定模型的基本形式，然后再通过训练确定更细致的路径，也就是模型参数，而在奔向目标的过程中，还得时不时停下来，观察一下自己离目的地是否更近了，是否走在正确的途径上，这个观察手段，也就是确定损失函数，模型训练过程中，要使损失函数越来越小。<br>感觉tensorflow也基本就是2的这个流程了，定义模型结构，定义损失函数，然后训练迭代至损失函数最小。深度学习之tensorflow里面总结的tensoflow基本开发步骤如下：<br>1）定义输入节点；<br>2）定义学习参数；<br>3）定义运算；<br>4）定义优化函数，优化目标<br>5）初始化所有变量<br>6）迭代更新参数到最优解<br>7）测试模型<br>8）使用模型</p>
@@ -443,6 +443,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/08/12/esl-tf-2/" rel="prev" title="统计学习基础的tensorflow实践-1">
+                统计学习基础的tensorflow实践-1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -518,7 +522,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -595,7 +599,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Chapter-3-Linear-Regression-Models-and-Least-Squares"><span class="nav-number">1.</span> <span class="nav-text">Chapter 3:Linear Regression Models and Least Squares</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#随便写写的思考"><span class="nav-number">1.1.</span> <span class="nav-text">随便写写的思考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标1"><span class="nav-number">1.2.</span> <span class="nav-text">目标1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标2"><span class="nav-number">1.3.</span> <span class="nav-text">目标2</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Chapter-3-Linear-Methods-for-Regression"><span class="nav-number">1.</span> <span class="nav-text">Chapter 3:Linear Methods for Regression</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#随便写写的思考"><span class="nav-number">1.1.</span> <span class="nav-text">随便写写的思考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标1"><span class="nav-number">1.2.</span> <span class="nav-text">目标1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标2"><span class="nav-number">1.3.</span> <span class="nav-text">目标2</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -615,7 +619,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
